@@ -413,7 +413,11 @@ export function startDetectorRunWorker(): Worker<DetectorRunJob> {
         // project+detector would otherwise collapse onto a single ClickHouse
         // row, letting ReplacingMergeTree overwrite prior windows and making
         // older alerts invisible to reconciliation and usage totals.
-        const budgetRunId = deterministicRunId(projectId, budgetAlert.findingId, budgetAlert.detectorId);
+        const budgetRunId = deterministicRunId(
+          projectId,
+          budgetAlert.findingId,
+          budgetAlert.detectorId,
+        );
         await writeDetectorRun({
           runId: budgetRunId,
           detectorId: budgetAlert.detectorId,

@@ -994,9 +994,7 @@ async function reconcileBudgetAlerts(workspaceId: string, projectIds: string[]):
         const cooldownKey = `budget:alert:cooldown:${detector.projectId}:${detector.id}:${windowKey}`;
         await connection.set(cooldownKey, "1", "EX", windowSecs);
 
-        console.log(
-          `[Billing] Budget reconciliation alert enqueued for detector ${detector.id}`,
-        );
+        console.log(`[Billing] Budget reconciliation alert enqueued for detector ${detector.id}`);
         await queue.close();
       } finally {
         await connection.quit();

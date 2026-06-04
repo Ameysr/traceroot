@@ -1,24 +1,22 @@
 """Tests for the budget alert module.
 
 Tests cover:
-- Redis INCRBYFLOAT counter accumulation
+- Redis Sorted Set rolling window spent counter
 - Threshold detection (below/at/above)
 - Cooldown suppression (no duplicate alerts)
 - Budget detector config caching
 - BullMQ enqueue on threshold breach
+- Rollback of cooldown on enqueue failure
 - No-op when no budget detectors exist
 """
 
 import json
-
-# Patch psycopg2 and celery before importing the module under test
 import sys
 from unittest.mock import MagicMock, patch
 
-# Create mock modules for psycopg2 and celery
+# Create mock modules for psycopg2 and celery before importing the module under test
 sys.modules.setdefault("psycopg2", MagicMock())
 sys.modules.setdefault("worker.celery_app", MagicMock())
-
 
 from worker.budget_alerts import (  # noqa: E402
     WINDOW_SECONDS,
@@ -27,10 +25,6 @@ from worker.budget_alerts import (  # noqa: E402
     _get_budget_detectors_cached,
     check_budget_thresholds,
 )
-
-# ---------------------------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------------------------
 
 
 def _make_detector(
@@ -55,23 +49,21 @@ def _make_redis_mock(
 ):
     """Create a mock Redis client with configurable behavior."""
     mock = MagicMock()
-    mock.incrbyfloat.return_value = counter_value
     mock.ttl.return_value = ttl_value
     mock.exists.return_value = cooldown_exists
     # SET NX returns True if key was set (no existing key), False otherwise
     mock.set.return_value = not cooldown_exists
 
+    # Mock zrangebyscore to return the simulated list of spend entries in the rolling window
+    mock.zrangebyscore.return_value = [f"{counter_value}:mock-uuid".encode()]
+
+    # By default, get returns None (representing a cache miss/unprocessed status)
     if cached_detectors is not None:
         mock.get.return_value = json.dumps(cached_detectors)
     else:
         mock.get.return_value = None
 
     return mock
-
-
-# ---------------------------------------------------------------------------
-# Tests: _deterministic_finding_id
-# ---------------------------------------------------------------------------
 
 
 class TestDeterministicFindingId:
@@ -96,21 +88,16 @@ class TestDeterministicFindingId:
         assert len(parts[4]) == 12
 
 
-# ---------------------------------------------------------------------------
-# Tests: _check_single_detector
-# ---------------------------------------------------------------------------
-
-
 class TestCheckSingleDetector:
     def test_below_threshold_no_enqueue(self):
         """When spend is below threshold, no finding should be enqueued."""
         detector = _make_detector(threshold_usd=100.0)
-        redis_mock = _make_redis_mock(counter_value=50.0, ttl_value=86000)
+        redis_mock = _make_redis_mock(counter_value=50.0)
 
         _check_single_detector(redis_mock, "proj-1", detector, batch_cost=10.0)
 
-        # INCRBYFLOAT should be called
-        redis_mock.incrbyfloat.assert_called_once()
+        # zadd should be called
+        redis_mock.zadd.assert_called_once()
         # No BullMQ enqueue (hset/rpush not called)
         redis_mock.hset.assert_not_called()
         redis_mock.rpush.assert_not_called()
@@ -120,7 +107,6 @@ class TestCheckSingleDetector:
         detector = _make_detector(threshold_usd=100.0)
         redis_mock = _make_redis_mock(
             counter_value=100.0,  # exactly at threshold
-            ttl_value=86000,
             cooldown_exists=False,
         )
 
@@ -137,7 +123,6 @@ class TestCheckSingleDetector:
         detector = _make_detector(threshold_usd=100.0)
         redis_mock = _make_redis_mock(
             counter_value=150.0,
-            ttl_value=86000,
             cooldown_exists=False,
         )
 
@@ -152,7 +137,6 @@ class TestCheckSingleDetector:
         detector = _make_detector(threshold_usd=100.0)
         redis_mock = _make_redis_mock(
             counter_value=150.0,
-            ttl_value=86000,
             cooldown_exists=True,  # cooldown active
         )
 
@@ -167,7 +151,6 @@ class TestCheckSingleDetector:
         detector = _make_detector(threshold_usd=100.0, window="24h")
         redis_mock = _make_redis_mock(
             counter_value=150.0,
-            ttl_value=86000,
             cooldown_exists=False,
         )
 
@@ -179,53 +162,15 @@ class TestCheckSingleDetector:
         assert cooldown_key.startswith("budget:alert:cooldown:proj-1:det-1:24h-")
 
     def test_new_counter_sets_ttl(self):
-        """When counter key has no TTL (new key), TTL should be set."""
+        """When counter key is written, expire is set for the window size + buffer."""
         detector = _make_detector(threshold_usd=1000.0, window="24h")
-        redis_mock = _make_redis_mock(
-            counter_value=10.0,
-            ttl_value=-1,  # no TTL set
-        )
+        redis_mock = _make_redis_mock(counter_value=10.0)
 
         _check_single_detector(redis_mock, "proj-1", detector, batch_cost=10.0)
 
         redis_mock.expire.assert_called_once()
         args = redis_mock.expire.call_args[0]
-        assert args[1] == WINDOW_SECONDS["24h"]
-
-    def test_rollout_migration_migrates_old_key_spend(self):
-        """Verify that when a new counter is initialized (TTL=-1) and an old un-scoped key exists,
-        its spend is migrated and the old key is deleted to prevent double counting.
-        """
-        detector = _make_detector(threshold_usd=100.0, window="24h")
-
-        mock_redis = MagicMock()
-        mock_redis.incrbyfloat.side_effect = [10.0, 35.0]
-        mock_redis.ttl.return_value = -1
-        mock_redis.get.return_value = b"25.0"
-        mock_redis.delete.return_value = 1
-        mock_redis.exists.return_value = False
-        mock_redis.set.return_value = True
-
-        _check_single_detector(mock_redis, "proj-1", detector, batch_cost=10.0)
-
-        # Should fetch the old key
-        mock_redis.get.assert_called_with("budget:project:proj-1:det-1:24h")
-        # Should delete the old key atomically
-        mock_redis.delete.assert_called_once_with("budget:project:proj-1:det-1:24h")
-        # Should set the TTL
-        mock_redis.expire.assert_called_once()
-
-    def test_existing_counter_skips_ttl(self):
-        """When counter key already has a TTL, don't reset it."""
-        detector = _make_detector(threshold_usd=1000.0)
-        redis_mock = _make_redis_mock(
-            counter_value=10.0,
-            ttl_value=50000,  # TTL already set
-        )
-
-        _check_single_detector(redis_mock, "proj-1", detector, batch_cost=10.0)
-
-        redis_mock.expire.assert_not_called()
+        assert args[1] == WINDOW_SECONDS["24h"] + 60
 
     def test_enqueued_job_contains_budget_alert_payload(self):
         """Verify the BullMQ job payload structure."""
@@ -237,7 +182,6 @@ class TestCheckSingleDetector:
         )
         redis_mock = _make_redis_mock(
             counter_value=60.0,
-            ttl_value=3000,
             cooldown_exists=False,
         )
 
@@ -259,10 +203,23 @@ class TestCheckSingleDetector:
         assert alert["data"]["current_spend_usd"] == 60.0
         assert alert["data"]["window"] == "1h"
 
+    def test_enqueue_failure_deletes_cooldown(self):
+        """Verify that an exception in enqueueing deletes the cooldown key to allow retry."""
+        detector = _make_detector(threshold_usd=100.0)
+        redis_mock = _make_redis_mock(
+            counter_value=150.0,
+            cooldown_exists=False,
+        )
+        redis_mock.hset.side_effect = RuntimeError("Redis write failed")
 
-# ---------------------------------------------------------------------------
-# Tests: _get_budget_detectors_cached
-# ---------------------------------------------------------------------------
+        try:
+            _check_single_detector(redis_mock, "proj-1", detector, batch_cost=50.0)
+        except RuntimeError:
+            pass
+
+        # Cooldown should be set, but deleted when hset raised an error
+        redis_mock.set.assert_called_once()
+        redis_mock.delete.assert_called_once()
 
 
 class TestGetBudgetDetectorsCached:
@@ -291,11 +248,6 @@ class TestGetBudgetDetectorsCached:
         redis_mock.set.assert_called()
 
 
-# ---------------------------------------------------------------------------
-# Tests: check_budget_thresholds (integration)
-# ---------------------------------------------------------------------------
-
-
 class TestCheckBudgetThresholds:
     @patch("worker.budget_alerts._get_redis")
     @patch("worker.budget_alerts._get_budget_detectors_cached")
@@ -320,8 +272,8 @@ class TestCheckBudgetThresholds:
 
         check_budget_thresholds("proj-1", batch_cost=10.0)
 
-        # Should call _get_redis and cache lookup, but no INCRBYFLOAT
-        mock_redis.return_value.incrbyfloat.assert_not_called()
+        # Should call _get_redis and cache lookup, but no single checks
+        mock_redis.return_value.zadd.assert_not_called()
 
     @patch("worker.budget_alerts._get_redis")
     @patch("worker.budget_alerts._get_budget_detectors_cached")
@@ -331,7 +283,8 @@ class TestCheckBudgetThresholds:
         det1 = _make_detector(detector_id="det-1")
         det2 = _make_detector(detector_id="det-2")
         mock_cached.return_value = [det1, det2]
-        mock_redis.return_value = MagicMock()
+        redis_mock = _make_redis_mock()
+        mock_redis.return_value = redis_mock
 
         check_budget_thresholds("proj-1", batch_cost=10.0)
 
@@ -345,7 +298,8 @@ class TestCheckBudgetThresholds:
         det1 = _make_detector(detector_id="det-1")
         det2 = _make_detector(detector_id="det-2")
         mock_cached.return_value = [det1, det2]
-        mock_redis.return_value = MagicMock()
+        redis_mock = _make_redis_mock()
+        mock_redis.return_value = redis_mock
 
         # First detector raises, second succeeds
         mock_check.side_effect = [RuntimeError("boom"), None]
@@ -367,14 +321,16 @@ class TestCheckBudgetThresholds:
         redis_mock = MagicMock()
         mock_redis.return_value = redis_mock
 
+        # Setup redis mock so `get` returns None initially for both top-level and
+        # detector-level checks, and returns a dummy value on subsequent calls
+        redis_mock.get.side_effect = [None, None, b"1"]
+
         # First call with idempotency key
-        redis_mock.set.return_value = True  # NX set succeeds (new key)
         check_budget_thresholds("proj-1", batch_cost=10.0, idempotency_key="unique-s3-key")
         assert mock_check.call_count == 1
 
         mock_check.reset_mock()
 
         # Second call with the same idempotency key
-        redis_mock.set.return_value = False  # NX set fails (already exists)
         check_budget_thresholds("proj-1", batch_cost=10.0, idempotency_key="unique-s3-key")
         assert mock_check.call_count == 0  # Should skip single detector checks

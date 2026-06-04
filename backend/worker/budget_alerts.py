@@ -298,13 +298,10 @@ def check_budget_thresholds(
         detector_id = detector["id"]
 
         # Skip detectors that already succeeded on a previous attempt.
-        detector_processed_key = (
-            f"{processed_key}:{detector_id}" if processed_key else None
-        )
+        detector_processed_key = f"{processed_key}:{detector_id}" if processed_key else None
         if detector_processed_key and redis_client.get(detector_processed_key):
             logger.debug(
-                f"Detector {detector_id} already processed for batch "
-                f"{idempotency_key}, skipping"
+                f"Detector {detector_id} already processed for batch {idempotency_key}, skipping"
             )
             continue
 
@@ -347,7 +344,7 @@ def _check_single_detector(
     # entries older than one full window on every write, so the set always
     # holds at most one window's worth of batches.
     #
-    # This gives a true rolling lookback (now − window_secs → now) rather
+    # This gives a true rolling lookback (now - window_secs -> now) rather
     # than snapping to a fixed UTC boundary. The old INCRBYFLOAT approach
     # keyed on `floor(now / window_secs) * window_secs`, meaning "24h"
     # measured "since the start of the current UTC day" — undercounting early
@@ -364,7 +361,7 @@ def _check_single_detector(
     # batch cost a second time.
     #
     # Without idempotency_key (fire-and-forget call sites), fall back to a
-    # random UUID so concurrent batches at the same millisecond don’t collapse.
+    # random UUID so concurrent batches at the same millisecond don't collapse.
     if idempotency_key:
         member = f"{batch_cost}:{idempotency_key}:{detector_id}"
     else:
