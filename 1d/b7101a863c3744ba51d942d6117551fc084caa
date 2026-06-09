@@ -1,0 +1,55 @@
+traceroot-cli/src/api/client.ts
+  s_6e4f47869ccb9e::t_ce2a3335c28f9d 64
+  s_6e4f47869ccb9e::t_1a66f30e2edfe6 79-82
+.github/workflows/traceroot-cli-ci.yml
+  s_6e4f47869ccb9e::t_4e15881559808d 1-41
+traceroot-cli/src/commands/traces.ts
+  s_6e4f47869ccb9e::t_1311bcac2cf84a 21
+traceroot-cli/src/config/manager.ts
+  s_6e4f47869ccb9e::t_75950fe96672c5 34,36-37
+  s_6e4f47869ccb9e::t_fbe98ce878409d 35,39
+  s_6e4f47869ccb9e::t_32adaeff14b3d3 9-10
+  s_6e4f47869ccb9e::t_ff20e2ac4e4ede 3
+traceroot-cli/package.json
+  s_6e4f47869ccb9e::t_fc7d4445a4e395 27-28
+traceroot-cli/src/commands/login.ts
+  s_6e4f47869ccb9e::t_0098485c64a78a 16
+  s_6e4f47869ccb9e::t_becba715159c39 8-15,17
+traceroot-cli/src/render/tree.ts
+  s_6e4f47869ccb9e::t_1fa679599550fd 22
+  s_6e4f47869ccb9e::t_d73ae4d484537c 39-56
+traceroot-cli/src/config/resolve.ts
+  s_6e4f47869ccb9e::t_5d477f0246e1f7 14
+  s_6e4f47869ccb9e::t_28e28fe7962a60 30-31
+  s_6e4f47869ccb9e::t_9a01e56782b396 52
+traceroot-cli/src/render/table.ts
+  s_6e4f47869ccb9e::t_73369beb3e39cb 16-19
+traceroot-cli/test/cli.test.ts
+  s_6e4f47869ccb9e::t_6d2ebea43fca5c 7-32
+traceroot-cli/src/output.ts
+  s_6e4f47869ccb9e::t_109a50ceb5cb15 47,49
+  s_6e4f47869ccb9e::t_ae7dca97074132 40-46,48,50-64
+  s_6e4f47869ccb9e::t_66175403de8d16 37
+  s_6e4f47869ccb9e::t_150907f7be2f60 32
+  s_6e4f47869ccb9e::t_a8347f5565006e 16-18
+  s_6e4f47869ccb9e::t_f66917ed75a4ee 11-15,30,35
+traceroot-cli/src/cli.ts
+  s_6e4f47869ccb9e::t_37c6eca745086a 6
+  s_6e4f47869ccb9e::t_f0bafa717aa1cd 25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "1db7101a863c3744ba51d942d6117551fc084caa",
+  "prompts": {},
+  "sessions": {
+    "s_6e4f47869ccb9e": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_152d00099ffec9qcSmR6ZmfeUL",
+        "model": "unknown"
+      },
+      "human_author": "Amey Ranaware <ranaware.amey@gmail.com>"
+    }
+  }
+}
