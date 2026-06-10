@@ -1,0 +1,19 @@
+traceroot-cli/README.md
+  s_6e4f47869ccb9e::t_96161107dc1589 88-89
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "442b435544fc40a68444ebc8a201e1b8cbe99119",
+  "prompts": {},
+  "sessions": {
+    "s_6e4f47869ccb9e": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_152d00099ffec9qcSmR6ZmfeUL",
+        "model": "unknown"
+      },
+      "human_author": "Amey Ranaware <ranaware.amey@gmail.com>"
+    }
+  }
+}
