@@ -1,0 +1,48 @@
+traceroot-cli/package.json
+  s_6e4f47869ccb9e::t_07d16445276938 21
+traceroot-cli/README.md
+  s_6e4f47869ccb9e::t_96161107dc1589 88-89
+  s_6e4f47869ccb9e::t_c8c796ab8c51d0 90-93
+traceroot-cli/src/config/manager.ts
+  s_6e4f47869ccb9e::t_1de26c18946feb 30-34
+  s_6e4f47869ccb9e::t_0e2f8d3c7eb005 3-12
+  s_6e4f47869ccb9e::t_8b74c32fdcb53a 44
+  s_6e4f47869ccb9e::t_155c4c92aaaf3f 48
+  s_6e4f47869ccb9e::t_2bb91e9e4d8552 45-46,49-59
+traceroot-cli/tsconfig.test.json
+  s_6e4f47869ccb9e::t_c8f7039926ed1c 1-2,6-8
+  s_6e4f47869ccb9e::t_649471e7955e93 3-5
+traceroot-cli/src/config/resolve.ts
+  s_6e4f47869ccb9e::t_017ffbb1d35736 14-15
+  s_6e4f47869ccb9e::t_3e4935a262d4bf 31-39
+traceroot-cli/src/render/tree.ts
+  s_6e4f47869ccb9e::t_c236d8d48d65d2 64
+  s_6e4f47869ccb9e::t_0a49a33670a8cd 60-63,65-69
+traceroot-cli/test/render/table.test.ts
+  s_6e4f47869ccb9e::t_c21d4f467be8fe 27
+traceroot-cli/test/output.test.ts
+  s_6e4f47869ccb9e::t_ec654a1d6367fc 5-14
+.github/workflows/traceroot-cli-ci.yml
+  s_6e4f47869ccb9e::t_ae0dcc80ed454e 39-42
+traceroot-cli/tsconfig.json
+  s_6e4f47869ccb9e::t_eef132814e4ae8 17
+traceroot-cli/src/api/client.ts
+  s_6e4f47869ccb9e::t_ffe1198a054985 91-98
+  s_6e4f47869ccb9e::t_07eb5f7627921f 72-82
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "757998cc29a99dae89076d49d6e2d99c80d7f08c",
+  "prompts": {},
+  "sessions": {
+    "s_6e4f47869ccb9e": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_152d00099ffec9qcSmR6ZmfeUL",
+        "model": "unknown"
+      },
+      "human_author": null
+    }
+  }
+}
