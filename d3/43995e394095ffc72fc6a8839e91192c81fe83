@@ -1,0 +1,22 @@
+traceroot-cli/src/config/resolve.ts
+  s_6e4f47869ccb9e::t_3e4935a262d4bf 31-39
+  s_6e4f47869ccb9e::t_017ffbb1d35736 14-15
+traceroot-cli/test/render/table.test.ts
+  s_6e4f47869ccb9e::t_c21d4f467be8fe 27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "d343995e394095ffc72fc6a8839e91192c81fe83",
+  "prompts": {},
+  "sessions": {
+    "s_6e4f47869ccb9e": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_152d00099ffec9qcSmR6ZmfeUL",
+        "model": "unknown"
+      },
+      "human_author": "Amey Ranaware <ranaware.amey@gmail.com>"
+    }
+  }
+}
