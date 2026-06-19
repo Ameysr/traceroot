@@ -1,0 +1,24 @@
+frontend/packages/core/src/llm-providers.ts
+  s_c16f7cac2ac1bb::t_c4d7eb88991dee 188
+tests/worker/tokens/test_pricing.py
+  s_c16f7cac2ac1bb::t_e266654ebcba79 205
+  s_c16f7cac2ac1bb::t_c4d7eb88991dee 112-117,193-204
+frontend/packages/core/src/standard-model-prices.json
+  s_c16f7cac2ac1bb::t_c4d7eb88991dee 853-864
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "940b1e7090be777f31a92c5a7a4f035e800193b0",
+  "prompts": {},
+  "sessions": {
+    "s_c16f7cac2ac1bb": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_12116a0b4ffeEab0h76fKEyG0l",
+        "model": "unknown"
+      },
+      "human_author": "Amey Ranaware <ranaware.amey@gmail.com>"
+    }
+  }
+}
