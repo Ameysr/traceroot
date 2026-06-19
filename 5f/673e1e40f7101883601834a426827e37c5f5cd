@@ -1,0 +1,25 @@
+frontend/packages/core/src/llm-providers.ts
+  s_c16f7cac2ac1bb::t_c4d7eb88991dee 188
+frontend/packages/core/src/standard-model-prices.json
+  s_c16f7cac2ac1bb::t_038b28174f508f 860-861
+  s_c16f7cac2ac1bb::t_c4d7eb88991dee 853-859,862-864
+tests/worker/tokens/test_pricing.py
+  s_c16f7cac2ac1bb::t_c4d7eb88991dee 112-117,193-204
+  s_c16f7cac2ac1bb::t_e266654ebcba79 205
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.8",
+  "base_commit_sha": "5f673e1e40f7101883601834a426827e37c5f5cd",
+  "prompts": {},
+  "sessions": {
+    "s_c16f7cac2ac1bb": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_12116a0b4ffeEab0h76fKEyG0l",
+        "model": "unknown"
+      },
+      "human_author": null
+    }
+  }
+}
