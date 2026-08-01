@@ -1,0 +1,19 @@
+tests/rest/test_trace_reader_filters.py
+  s_49aa02e26517c6::t_e699b27a07015c 185-189,191-193
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "be236f357f28a1bb457b4ce531c232d389c37612",
+  "prompts": {},
+  "sessions": {
+    "s_49aa02e26517c6": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_041d1e76affeQ6HGRCnbuzbOoB",
+        "model": "unknown"
+      },
+      "human_author": "Amey Ranaware <ranaware.amey@gmail.com>"
+    }
+  }
+}
