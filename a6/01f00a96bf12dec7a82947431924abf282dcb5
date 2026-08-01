@@ -1,0 +1,28 @@
+backend/worker/otel_transform.py
+  s_1428b492238e3e::t_f7f0fc68956e98 467-469,473-474
+  s_1428b492238e3e::t_680b2a18325fec 1087-1095,1100-1103
+tests/worker/test_otel_transform.py
+  s_1428b492238e3e::t_9c544f8c58c146 2055-2063
+frontend/ui/src/features/traces/utils/index.ts
+  s_1428b492238e3e::t_193f30cc808bea 317-329,331-344
+frontend/ui/src/features/traces/utils/index.test.ts
+  s_1428b492238e3e::t_fb7226976d1ab0 362,386-393,403,431-455
+tests/worker/test_otel_transform_metadata.py
+  s_1428b492238e3e::t_efeeba0a91f1a7 477-495
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "a601f00a96bf12dec7a82947431924abf282dcb5",
+  "prompts": {},
+  "sessions": {
+    "s_1428b492238e3e": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_04275e429ffeinTeE41zPNP9nk",
+        "model": "unknown"
+      },
+      "human_author": "Amey Ranaware <ranaware.amey@gmail.com>"
+    }
+  }
+}
