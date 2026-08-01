@@ -1,0 +1,28 @@
+backend/rest/routers/public/traces_read.py
+  s_49aa02e26517c6::t_095e1dfad9a181 65-72,75-79,88
+tests/rest/test_public_traces_read.py
+  s_49aa02e26517c6::t_095e1dfad9a181 190-195,197-214,216-218
+  s_49aa02e26517c6::t_c29d5930c33f86 196,215
+backend/rest/openapi/public.json
+  s_49aa02e26517c6::t_095e1dfad9a181 1690-1707
+tests/rest/test_trace_reader_filters.py
+  s_49aa02e26517c6::t_095e1dfad9a181 171-218
+backend/rest/services/trace_reader.py
+  s_49aa02e26517c6::t_095e1dfad9a181 392,421-435,482,526
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "f0841829f5bf57539821d8e40781854c416e9ef8",
+  "prompts": {},
+  "sessions": {
+    "s_49aa02e26517c6": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_041d1e76affeQ6HGRCnbuzbOoB",
+        "model": "unknown"
+      },
+      "human_author": "Amey Ranaware <ranaware.amey@gmail.com>"
+    }
+  }
+}
