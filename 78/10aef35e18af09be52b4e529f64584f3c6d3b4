@@ -1,0 +1,39 @@
+frontend/ui/src/features/traces/components/SpanInfoPanel.test.tsx
+  s_1428b492238e3e::t_02d71382c2a215 216-256,258
+  s_1428b492238e3e::t_914fd2db4d4d44 257
+frontend/ui/src/features/traces/utils/index.test.ts
+  s_1428b492238e3e::t_17a68d77a841cf 361-428
+  s_1428b492238e3e::t_aadbb4869f0d67 9
+tests/worker/test_otel_transform.py
+  s_1428b492238e3e::t_a0b3385ede13d8 1909-1949
+  s_1428b492238e3e::t_5dc55114c35ba8 2001
+  s_1428b492238e3e::t_cca630edd6cf55 2020-2022,2029,2033
+backend/worker/otel_transform.py
+  s_1428b492238e3e::t_56b262cb4cec89 1046-1051
+  s_1428b492238e3e::t_455302d5c937a8 940-947
+  s_1428b492238e3e::t_50ebe5e6033595 46-100,396,1035-1039
+  s_1428b492238e3e::t_d10a2029a44628 1043-1045
+  s_1428b492238e3e::t_f629bd383056ba 381-395,397-405,418-424,431-432,446-451,454-455,461-470
+  s_1428b492238e3e::t_ebe24d62af8b83 933
+  s_1428b492238e3e::t_406d12af1333d5 37,101,1025-1034,1040-1042
+tests/worker/test_otel_transform_metadata.py
+  s_1428b492238e3e::t_89227b932a8380 415-434
+  s_1428b492238e3e::t_74c96dc60c0db4 412-414
+  s_1428b492238e3e::t_111f1fa74e96b6 435-437
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "7810aef35e18af09be52b4e529f64584f3c6d3b4",
+  "prompts": {},
+  "sessions": {
+    "s_1428b492238e3e": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_04275e429ffeinTeE41zPNP9nk",
+        "model": "unknown"
+      },
+      "human_author": null
+    }
+  }
+}
