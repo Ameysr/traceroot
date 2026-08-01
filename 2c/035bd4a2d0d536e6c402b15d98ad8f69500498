@@ -1,0 +1,32 @@
+frontend/ui/src/features/traces/components/breakdown-ordering.test.ts
+  s_1428b492238e3e::t_298febaeb77915 4
+  s_1428b492238e3e::t_caaf3f6176787f 69-102
+backend/worker/otel_transform.py
+  s_1428b492238e3e::t_b532b6917e16c9 958-959,962
+  s_1428b492238e3e::t_3e94ed6421c528 1061-1093
+tests/worker/test_otel_transform_metadata.py
+  s_1428b492238e3e::t_814007d54e8ba6 470-472,476
+  s_1428b492238e3e::t_fb8f8e1c1e6e67 450-469,473-475
+tests/worker/test_otel_transform.py
+  s_1428b492238e3e::t_bb0ddff6c99556 1950-1969
+frontend/ui/src/features/traces/components/TokenUsageBreakdown.tsx
+  s_1428b492238e3e::t_846b15e15e4e6c 13-47
+  s_1428b492238e3e::t_35dbb0b68910d1 87-90
+  s_1428b492238e3e::t_dcffca9aa4679e 124
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "2c035bd4a2d0d536e6c402b15d98ad8f69500498",
+  "prompts": {},
+  "sessions": {
+    "s_1428b492238e3e": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_04275e429ffeinTeE41zPNP9nk",
+        "model": "unknown"
+      },
+      "human_author": "Amey Ranaware <ranaware.amey@gmail.com>"
+    }
+  }
+}
